@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "REST API for plan",
   "main": "plan.js",
+  "dependencies": {}
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
