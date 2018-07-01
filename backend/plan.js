@@ -9,7 +9,7 @@ app.use(express.static(__dirname + '/../frontend'));
 
 const { Client } = require('pg')
 const client = new Client({
-    user: 'jia',
+    user: 'jiazhan',
     database: 'postgres',
 });
 client.connect((err) => {
@@ -30,8 +30,8 @@ app.get('/main.html', function(req, res) {
 	  res.sendFile(path.join(__dirname+'/../frontend/main.html'));
 });
 
-const user_table = 'test_users'
-const plan_table = 'test_plans'
+const user_table = 'project_plan_prod_users'
+const plan_table = 'project_plan_prod_plans'
 
 function isValidTimespan(timespan) {
     return timespan == 'day' || timespan == 'week' || timespan == 'month'

@@ -22,8 +22,7 @@ $(document).ready(function() {
             success: function(data) {
                 if (data.state) {
                     localStorage.setItem("user_id", user_id)
-                    window.location.href =
-                        "http://lioncathome.ddns.net:8080/main.html"
+                    window.location.href = base_url + '/main.html'
                 } else {
                     $('#alertcontent').empty()
                     $('#alertcontent').append('<p>'+data.err_message+'</p>')
