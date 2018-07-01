@@ -1,0 +1,18 @@
+var express = require('express');
+var app = express();
+var path = require('path');
+app.use(express.static(__dirname + '/../bootstrap'));
+app.get('/', function(req, res) {
+	  res.sendFile(path.join(__dirname+'/../bootstrap/index.html'));
+	  });
+app.get('/scopes/jia', function(req, res) {
+	  res.send('Hello I am Jia\n');
+	  });
+app.get('/scopes/json', function(req, res) {
+	  res.sendFile(path.join(__dirname+'/jsons/hello.json'));
+	  });
+app.get('/scopes/jia/categories/daily', function(req, res) {
+	  res.sendFile(path.join(__dirname+'/jsons/daily.json'));
+	  });
+app.listen(8080);
+console.log('Listening on port 8080...');

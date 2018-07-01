@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script>
+$(document).ready(function() {
+    const base_url = 'http://lioncathome.ddns.net:8080'
+    $('#login').click(function() {
+        var user_id = $('#username').val()
+        var password = $('#password').val()
+        $.ajax({
+            url: base_url+'/users/'+user_id+'/password/'+password,
+            error: function(request, status, error) {
+                $('#alertcontent').empty()
+                $('#alertcontent').append('<p>'+request.responseText+'</p>')
+                $('#popalert').modal('show')
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.state) {
+                    localStorage.setItem("user_id", user_id)
+                    window.location.href =
+                        "http://lioncathome.ddns.net:8080/main.html"
+                } else {
+                    $('#alertcontent').empty()
+                    $('#alertcontent').append('<p>'+data.err_message+'</p>')
+                    $('#popalert').modal('show')
+                }
+            },
+            type: 'get'
+        })
+    })
+    $('#signup').click(function() {
+        var user_id = $('#username').val()
+        var password = $('#password').val()
+        $.ajax({
+            url: base_url+'/users',
+            data: {
+                user_id: user_id,
+                password: password
+            },
+            error: function(request, status, error) {
+                $('#alertcontent').empty()
+                $('#alertcontent').append('<p>'+request.responseText+'</p>')
+                $('#popalert').modal('show')
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.state) {
+                    $('#alertcontent').empty()
+                    $('#alertcontent').append('<p>Sign up successfully.</p>')
+                    $('#popalert').modal('show')
+                } else {
+                    $('#alertcontent').empty()
+                    $('#alertcontent').append('<p>'+data.err_message+'</p>')
+                    $('#popalert').modal('show')
+                }
+            },
+            type: 'post'
+        })
+    })
+})
+</script>
+</head>
+
+<body style="height:100%">
+<div class="container" style="height:100%;display:flex;align-items:center;">
+    <div class="row vertical-offset-100" style="width:100%">
+    	<div class="col-md-4 col-md-offset-4">
+    		<div class="panel panel-default">
+			  	<div class="panel-heading">
+			    	<h3 class="panel-title">Please sign in</h3>
+			 	</div>
+			  	<div class="panel-body">
+			    	<form accept-charset="UTF-8" role="form">
+                    <fieldset>
+			    	  	<div class="form-group">
+			    		    <input class="form-control" placeholder="Username" id="username" type="text">
+			    		</div>
+			    		<div class="form-group">
+			    			<input class="form-control" placeholder="Password" id="password" type="password" value="">
+			    		</div>
+			    	</fieldset>
+			      	</form>
+                    <button id="login" class="btn btn-lg btn-success btn-block">Login</button>
+                    <button id="signup" class="btn btn-lg btn-default btn-block">Sign Up</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="popalert" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Error Message</h5>
+      </div>
+      <div class="modal-body" id="alertcontent">
+      </div>
+    </div>
+  </div>
+</div>
+     
+</body>
+</html> 
+
