@@ -29,7 +29,7 @@ const planRowHtmlTmpl =
          </button>
 	   </td>
     </tr>`
-const base_url = 'http://lioncathome.ddns.net:8080'
+const base_url = 'http://lioncathome.ddns.net:80'
 
 var user_id = localStorage.getItem('user_id')
 var day_plan_date, week_plan_date, month_plan_date
@@ -229,15 +229,16 @@ $(document).ready(function(){
         var table = $(this).parents('table')
         var timespan = table.prop('id').split('-')[0]
         var target_date = $(this).parent().siblings('input').val()
-        console.log('target_date:' + target_date)
         if (target_date == '') {
             showAlert('No date has been selected')
             return
         }
 
-        if (target_date == day_plan_date.format('YYYY-MM-DD')) {
-            showAlert("Please select a different date to shift")
-            return
+        if (timespan === 'day') {
+            if (target_date == day_plan_date.format('YYYY-MM-DD')) {
+                showAlert("Please select a different date to shift")
+                return
+            }
         }
         if (timespan === 'week') {
             target_date =
