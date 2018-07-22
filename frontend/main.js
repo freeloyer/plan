@@ -97,6 +97,11 @@ function loadAllPlans(timespan) {
                              plan.plan_priority,
                              plan.plan_progress ? 'btn-reopen' : 'btn-finish',
                              plan.plan_progress ? 'Reopen' : 'Finish']))
+                     var textarea = $('#plan_' + plan.plan_id + ' textarea')
+                     textarea.height('auto')
+                     var height = textarea.prop('scrollHeight') -
+                                  textarea.css('padding')[0]*2
+                     textarea.height(height)
                      // If the plan is done, disable editing the row.
                      if (plan.plan_progress) {
                          var row = $('#plan_' + plan.plan_id)
@@ -200,14 +205,9 @@ $(document).ready(function(){
 
     loadAllPlans('day')
 
-    $('a[data-toggle="tab"]').on('show.bs.tab', function(){
-        var target = $(this).attr("href")
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(){
+        var target = $(this).attr("href").toString()
         loadAllPlans(target.substr(1))
-        $(target + ' textarea').each(function(row){
-            $(this).height('auto')
-            var height = row.prop('scrollHeight') - row.css('padding')[0]*2
-            row.height(height)
-        })
     })
 
 	$("#addrow-day").on("click", function(){
@@ -229,13 +229,30 @@ $(document).ready(function(){
         var table = $(this).parents('table')
         var timespan = table.prop('id').split('-')[0]
         var target_date = $(this).parent().siblings('input').val()
+        console.log('target_date:' + target_date)
+        if (target_date == '') {
+            showAlert('No date has been selected')
+            return
+        }
 
+        if (target_date == day_plan_date.format('YYYY-MM-DD')) {
+            showAlert("Please select a different date to shift")
+            return
+        }
         if (timespan === 'week') {
             target_date =
                 moment(target_date).startOf('isoWeek').format('YYYY-MM-DD')
+            if (target_date == week_plan_date.format('YYYY-MM-DD')) {
+                showAlert("Please select a different week to shift")
+                return
+            }
         } else if (timespan === 'month') {
             target_date =
                 moment(target_date).startOf('month').format('YYYY-MM-DD')
+            if (target_date == month_plan_date.format('YYYY-MM-DD')) {
+                showAlert("Please select a different month to shift")
+                return
+            }
         }
 
         var selected_plan_ids = []
@@ -246,6 +263,10 @@ $(document).ready(function(){
                 selected_plan_ids.push(plan_id)
             }
         })
+        if (selected_plan_ids.length == 0) {
+            showAlert('No items have been selected to shift')
+            return
+        }
 
         updatePlans(selected_plan_ids, {start_date: target_date})
 
