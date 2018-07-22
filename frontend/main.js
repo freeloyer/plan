@@ -156,7 +156,7 @@ function createAPlan(cur_row) {
             plan_timespan: timespan,
             plan_priority: cur_row.find('.dropdown-toggle').text(),
             plan_progress: progress,
-            content: cur_row.find('textarea').val().replace("'", "''")
+            content: cur_row.find('textarea').val().replace(/'/g, "''")
         },
         dataType: 'json',
         success: function(data) {
@@ -354,7 +354,8 @@ $(document).on('blur', 'textarea', function(e){
         if (plan_type === 'unsavedplan') {
             createAPlan(cur_row)
         } else {
-            updatePlans([plan_id], {content: $(this).val().replace("'", "''")})
+            updatePlans([plan_id], 
+                        {content: $(this).val().replace(/'/g, "''")})
         }
     }
 })
